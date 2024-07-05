@@ -55,12 +55,10 @@ public class MessageConfiguration implements ReloadableConfig {
     }
     @Contextual
     public static class BomboStoreMessages {
+
+        public String BoughtBomboItem = "&8» &aYou Bought &6{BOMBO_ITEM} ";
+        public String SellBomboItem = "&8» &aYou Sold &6{BOMBO_ITEM}";
     }
-
-
-
-
-
     @Contextual
     public static class WrongUsage {
         public String invalidUsage = "&4Correct Usage &8>> &7{COMMAND}.";
