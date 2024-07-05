@@ -2,23 +2,16 @@ package eu.wejsonekk.bombocraft;
 
 import com.github.benmanes.caffeine.cache.Scheduler;
 import com.google.common.base.Stopwatch;
-import com.j256.ormlite.support.ConnectionSource;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
 import eu.wejsonekk.bombocraft.commands.handler.InvalidUsageMessage;
 import eu.wejsonekk.bombocraft.commands.handler.MissingPermissionMessage;
-import eu.wejsonekk.bombocraft.commands.implementation.BomboStoreCommand;
-import eu.wejsonekk.bombocraft.commands.implementation.DiscordCommand;
-import eu.wejsonekk.bombocraft.commands.implementation.YoutubeCommand;
+import eu.wejsonekk.bombocraft.commands.implementation.*;
 import eu.wejsonekk.bombocraft.configuration.ConfigManager;
 import eu.wejsonekk.bombocraft.configuration.implementation.MessageConfiguration;
 import eu.wejsonekk.bombocraft.configuration.implementation.PluginConfiguration;
-import eu.wejsonekk.bombocraft.database.DatabaseManager;
 import eu.wejsonekk.bombocraft.feature.shop.BomboStoreGui;
 import eu.wejsonekk.bombocraft.notification.NotificationAnnouncer;
-import eu.wejsonekk.bombocraft.user.User;
-import eu.wejsonekk.bombocraft.user.UserRepository;
-import eu.wejsonekk.bombocraft.user.UserService;
 import eu.wejsonekk.bombocraft.util.LegacyColorProcessor;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.AudienceProvider;
@@ -29,8 +22,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.sql.SQLException;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public class BomboCraftPlugin extends JavaPlugin {
@@ -83,25 +74,25 @@ public class BomboCraftPlugin extends JavaPlugin {
                 .postProcessor(new LegacyColorProcessor())
                 .build();
 
-        try {
-            DatabaseManager.createTables();
-
-            ConnectionSource connectionSource = DatabaseManager.getConnectionSource();
-            UserRepository userRepository = new UserRepository(connectionSource);
-            UserService userService = new UserService(userRepository);
-
-            User user = new User("WejsoneKK", UUID.randomUUID());
-            userService.addUser(user);
-
-            User retrievedUser = userService.getUserById(user.getId());
-            System.out.println("Retrieved User: " + retrievedUser.getName());
-
-            connectionSource.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            throw new SQLException(e);
-        }
+//        try {
+//            DatabaseManager.createTables();
+//
+//            ConnectionSource connectionSource = DatabaseManager.getConnectionSource();
+//            UserRepository userRepository = new UserRepository(connectionSource);
+//            UserService userService = new UserService(userRepository);
+//
+//            User user = new User("WejsoneKK", UUID.randomUUID());
+//            userService.addUser(user);
+//
+//            User retrievedUser = userService.getUserById(user.getId());
+//            System.out.println("Retrieved User: " + retrievedUser.getName());
+//
+//            connectionSource.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            throw new SQLException(e);
+//        }
 
 
         this.notificationAnnouncer = new NotificationAnnouncer(this.audienceProvider, this.miniMessage);
@@ -115,12 +106,16 @@ public class BomboCraftPlugin extends JavaPlugin {
                 .commands(
                         new BomboStoreCommand(this.bomboStoreGui),
                         new YoutubeCommand(this.messageConfiguration, this.notificationAnnouncer),
-                        new DiscordCommand(this.notificationAnnouncer, this.messageConfiguration)
+                        new DiscordCommand(this.notificationAnnouncer, this.messageConfiguration),
+                        new BugReportCommand(this.pluginConfiguration, this.notificationAnnouncer),
+                        new BugReportCommand(this.pluginConfiguration, this.notificationAnnouncer),
+                        new WebSiteCommand(this.notificationAnnouncer, this.messageConfiguration),
+                        new StoreCommand(this.notificationAnnouncer, this.messageConfiguration)
                 ).invalidUsage(new InvalidUsageMessage(this.notificationAnnouncer, this.messageConfiguration))
                 .missingPermission(new MissingPermissionMessage(this.messageConfiguration, this.notificationAnnouncer))
                 .build();
 
         long elapsed = started.elapsed().toMillis();
-        this.getLogger().info("Successfully loaded starblock-oneblock-core in " + elapsed + "ms");
+        this.getLogger().info("Successfully loaded bombocraft-network in " + elapsed + "ms");
     }
 }

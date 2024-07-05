@@ -7,21 +7,21 @@ import eu.wejsonekk.bombocraft.configuration.implementation.MessageConfiguration
 import eu.wejsonekk.bombocraft.notification.NotificationAnnouncer;
 import org.bukkit.entity.Player;
 
-@Command(name = "youtube", aliases = {"yt"})
-public class YoutubeCommand {
+@Command(name = "store", aliases = {"bombo-store", "getastore", "buyabombo"})
+public class StoreCommand {
 
-    private MessageConfiguration messages;
     private NotificationAnnouncer announcer;
+    private MessageConfiguration messages;
 
-    public YoutubeCommand(MessageConfiguration messages, NotificationAnnouncer announcer) {
-        this.messages = messages;
+    public StoreCommand(NotificationAnnouncer announcer, MessageConfiguration messages) {
         this.announcer = announcer;
+        this.messages = messages;
     }
 
-    @Execute
-    void executeYoutube(@Context Player player){
 
-        this.messages.standardCommands.youtubeCommand
+    @Execute
+    void sendStore(@Context Player player){
+        this.messages.standardCommands.StoreCommand
                 .stream()
                 .forEach(messages -> {
                     this.announcer.sendMessage(player, messages);

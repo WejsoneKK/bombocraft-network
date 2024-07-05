@@ -14,12 +14,23 @@ public class PluginConfiguration implements ReloadableConfig {
     @Description({"", "# DATABASE SETTINGS (MariaDB/SQLITE)"})
     public DatabaseConfigSection database = new DatabaseConfigSection();
 
-//    @Description({"", "# REDIS CHANNEL MESSAGING SETTINGS SECTION | DO NOT TOUCH!"})
-//    public RedisMessagingChannelsSection RedisMessagingChannels = new RedisMessagingChannelsSection();
+    @Description({" ", "# DISCORD WEBHOOK SETTINGS"})
+    public DiscordWebHookSettings discordWebHookSettings = new DiscordWebHookSettings();
+
+    @Contextual
+    public static class DiscordWebHookSettings {
+        public String bugReportWebhook = "none";
+        public String HelPopWebHook = "none";
+        public String reportWebhook = "";
+        public String staffChatWebhook = "";
+    }
+    //    @Description({"", "# REDIS CHANNEL MESSAGING SETTINGS SECTION | DO NOT TOUCH!"})
+    //    public RedisMessagingChannelsSection RedisMessagingChannels = new RedisMessagingChannelsSection();
     @Contextual
     public static class DatabaseConfigSection {
-        public String hostname = "127.0.0.1";
-        public String database = "database";
+
+    public String hostname = "127.0.0.1";
+    public String database = "database";
         public String username = "user";
         public int port = 4406;
         public String password = "password";

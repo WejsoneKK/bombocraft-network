@@ -36,6 +36,23 @@ public class MessageConfiguration implements ReloadableConfig {
                 "",
                 ""
         );
+        public List<String> WebsiteCommand = List.of(
+                "",
+                "",
+                "          <reset>                   <reset> <gradient:#fe6613:#ff3908><b>BOMBOCRAFT</gradient><reset>                 <reset>" ,
+                "          <reset>  <reset> <gradient:#17b2ff:#2667ff><click:open_url:'https://www.bombocraft.com'>Get our a Website</click></gradient>",
+                "          <reset>              <hover:show_text:'<gradient:#17b2ff:#2667ff>Click here, to get a website link'><click:open_url:'https://www.bombocraft.com'><gradient:#24a0ff:#1245ff>[GO TO A WEBSITE]</gradient></click></hover>",
+                "          <reset>                                                          <reset>",
+                ""
+        );
+        public List<String> StoreCommand = List.of(
+                "",
+                "          <reset>                   <reset> <gradient:#fe6613:#ff3908><b>BOMBOCRAFT</gradient><reset>                 <reset>" ,
+                "          <reset>  <reset> <gradient:#17b2ff:#2667ff><click:open_url:'https://bombocraft.tebex.io'>Get our a Store</click></gradient>",
+                "          <reset>              <hover:show_text:'<gradient:#17b2ff:#2667ff>Click here, to get a store link'><click:open_url:'https://bombocraft.tebex.io'><gradient:#24a0ff:#1245ff>[GO TO A STORE]</gradient></click></hover>",
+                "          <reset>                                                          <reset>",
+                ""
+        );
         public List<String> DiscordCommand = List.of(
                 "          <reset>                   <reset> <gradient:#fe6613:#ff3908><b>BOMBOCRAFT</gradient><reset>                 <reset>" ,
                 "          <reset>  <reset> <gradient:#17b2ff:#2667ff><click:open_url:'https://bombocraft.com/discord'>Join our amazing community on Discord....</click></gradient>",
