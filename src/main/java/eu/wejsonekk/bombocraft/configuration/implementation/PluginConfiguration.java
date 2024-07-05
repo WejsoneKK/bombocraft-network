@@ -11,11 +11,11 @@ import java.io.File;
 public class PluginConfiguration implements ReloadableConfig {
 
 
-    @Description({"", "# Ustawienia bazy danych (MariaDB/SQLITE)"})
+    @Description({"", "# DATABASE SETTINGS (MariaDB/SQLITE)"})
     public DatabaseConfigSection database = new DatabaseConfigSection();
 
-    @Description({"", "# Ustawienia kanałów wiadomości (redis pub/sub)", "#(NIE TYKAĆ JEŻELI NIE WIESZ CO ROBISZ KURWA NIE RUSZAJ KURWO JEBANA RABBITOWSKA!"})
-    public RedisMessagingChannelsSection RedisMessagingChannels = new RedisMessagingChannelsSection();
+//    @Description({"", "# REDIS CHANNEL MESSAGING SETTINGS SECTION | DO NOT TOUCH!"})
+//    public RedisMessagingChannelsSection RedisMessagingChannels = new RedisMessagingChannelsSection();
     @Contextual
     public static class DatabaseConfigSection {
         public String hostname = "127.0.0.1";
@@ -25,24 +25,6 @@ public class PluginConfiguration implements ReloadableConfig {
         public String password = "password";
         public String type = "mysql";
         public boolean useSSL = false;
-
-    }
-    @Contextual
-    public static class RedisMessagingChannelsSection {
-
-        public String discordRewardChannel = "oneblock:discordreward";
-        public String youtubeRewardChannel = "oneblock:youtubereward";
-        public String tiktokRewardChannel = "oneblock:tiktokreward";
-        public String mclistRewardChannel = "oneblock:mclist";
-        public String MinecraftListaRewardChannel = "oneblock:minecraftlista";
-        public String TablistaRewardChannel = "oneblock:tablista";
-        public String discordSyncChannel = "starblock:discord_role_sync";
-        public String helpopChannel = "starblock:helpop";
-        public String reportChannel = "reports:oneblock";
-    }
-    @Contextual
-    public static class RestApiConfigSection {
-
 
     }
     @Override
