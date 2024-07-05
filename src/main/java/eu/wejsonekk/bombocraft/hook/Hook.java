@@ -2,12 +2,8 @@ package eu.wejsonekk.bombocraft.hook;
 
 public interface Hook {
 
-    void Hook();
+    void initialize();
 
-    void UnHook();
+    String pluginName();
 
-    boolean isHooked();
-
-    String hookName();
-    String versionHook();
 }
