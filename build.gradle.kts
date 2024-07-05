@@ -11,6 +11,7 @@ version = "1.0-SNAPSHOT"
 bukkit {
     main = "eu.wejsonekk.bombocraft.BomboCraftPlugin"
     name = "bombocraft-network"
+    apiVersion = "1.13"
     version = "1.0"
     description = "BomboCraft Network Suite"
     website = "https://bombocraft.com"
@@ -25,7 +26,7 @@ repositories {
     maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
     maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/snapshots/") }
     maven("https://repo.papermc.io/repository/maven-public/")
-
+    maven("https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc")
 }
 
 dependencies {
@@ -46,6 +47,8 @@ dependencies {
     implementation("org.panda-lang:panda-utilities:0.5.2-alpha")
 
     // Ormlite jdbc
+    implementation("com.j256.ormlite:ormlite-core:6.1")
+
     compileOnly("com.j256.ormlite:ormlite-jdbc:6.1")
 
     // Hikari
@@ -58,10 +61,18 @@ dependencies {
     compileOnly("net.luckperms:api:5.4")
 
     // Caffeine
-    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
+//    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.5")
 
     // Vault
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+
+    // SQLITE
+    implementation("org.xerial:sqlite-jdbc:3.46.0.0")
+    //    implementation("org.xerial:sqlite-jdbc:3.39.4")
+    // CACHE
+    implementation("com.j256.ormlite:ormlite-jdbc:6.1")
+
     /* General */
     val lombok = "1.18.32"
     compileOnly("org.projectlombok:lombok:$lombok")
