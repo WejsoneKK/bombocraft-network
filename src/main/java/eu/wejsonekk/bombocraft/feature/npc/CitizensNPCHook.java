@@ -1,7 +1,5 @@
 package eu.wejsonekk.bombocraft.feature.npc;
 
-import eu.wejsonekk.bombocraft.hook.Hook;
-
 public class CitizensNPCHook implements Hook {
     @Override
     public void Hook() {
