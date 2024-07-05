@@ -9,6 +9,7 @@ import eu.wejsonekk.bombocraft.commands.handler.InvalidUsageMessage;
 import eu.wejsonekk.bombocraft.commands.handler.MissingPermissionMessage;
 import eu.wejsonekk.bombocraft.commands.implementation.BomboStoreCommand;
 import eu.wejsonekk.bombocraft.commands.implementation.DiscordCommand;
+import eu.wejsonekk.bombocraft.commands.implementation.YoutubeCommand;
 import eu.wejsonekk.bombocraft.configuration.ConfigManager;
 import eu.wejsonekk.bombocraft.configuration.implementation.MessageConfiguration;
 import eu.wejsonekk.bombocraft.configuration.implementation.PluginConfiguration;
@@ -113,6 +114,7 @@ public class BomboCraftPlugin extends JavaPlugin {
                 })
                 .commands(
                         new BomboStoreCommand(this.bomboStoreGui),
+                        new YoutubeCommand(this.messageConfiguration, this.notificationAnnouncer),
                         new DiscordCommand(this.notificationAnnouncer, this.messageConfiguration)
                 ).invalidUsage(new InvalidUsageMessage(this.notificationAnnouncer, this.messageConfiguration))
                 .missingPermission(new MissingPermissionMessage(this.messageConfiguration, this.notificationAnnouncer))
