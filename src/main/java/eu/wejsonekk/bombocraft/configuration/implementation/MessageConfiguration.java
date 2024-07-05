@@ -43,17 +43,18 @@ public class MessageConfiguration implements ReloadableConfig {
                 "          <reset>                                                          <reset>"
         );
     }
+    @Description({" ", " # (SHOP GUI MESSAGES SECTIOn )"})
+    public StoreMessages ShopMessages = new StoreMessages();
+    @Description({" ", " # BOMBO STORE SHOP GUI SECTION "})
+    public BomboStoreMessages bomboStoreMessages = new BomboStoreMessages();
 
     @Contextual
+    public static class StoreMessages {
+        public String boughtItem = "&8» &aYou Bought &6{ITEM} ";
+        public String sellItem = "&8» &aYou Sold &6{ITEM}";
+    }
+    @Contextual
     public static class BomboStoreMessages {
-
-        public String sucessfullyBuyBomboItem = "&8» &aSuccessfully you have buyed a {ITEM}";
-        public String successfullySellBomboItem = "» &aSucessfully you have sell a {ITEM} by {PRICE}";
-        public String noMoney = "&8» &4Error &cYou don't have money to buy &6{ITEM}";
-        public String balance = "&8» &e&lYOUR BALANCE: {BALANCE}";
-        public String noItemExists = "&8» &a";
-
-
     }
 
 

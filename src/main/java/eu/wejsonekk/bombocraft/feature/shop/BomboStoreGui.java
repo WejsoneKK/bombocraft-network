@@ -91,7 +91,7 @@ public class BomboStoreGui {
 
         ItemBuilder flops = ItemBuilder.from(Material.CHAINMAIL_BOOTS);
         flops.name(this.color("<gradient:gold:yellow>BOMBO FLIP-FLOPS"));
-        flops.lore(this.color("&r", "&8PRICES: ", "&fSell: &a-/-$", "&fBuy: &b500K$"));
+        flops.lore(this.color("&r", "&8PRICES: ", "&fSell: &a-/-$", "&fBuy: &b250K$"));
         flops.enchant(Map.of(Enchantment.PROTECTION_ENVIRONMENTAL, 10, Enchantment.DURABILITY, 10), true);
         GuiItem BomboFlapFlops = flops
                 .asGuiItem(event -> {

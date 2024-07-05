@@ -1,6 +1,7 @@
 package eu.wejsonekk.bombocraft.hook.implementation;
 
-import eu.wejsonekk.starblock.hook.Hook;
+import eu.wejsonekk.bombocraft.hook.Hook;
+import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -8,6 +9,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 public class VaultHook implements Hook {
 
     private final Server server;
+    @Getter
     private Economy economy;
 
     public VaultHook(Server server) {
@@ -30,7 +32,4 @@ public class VaultHook implements Hook {
         return "Vault";
     }
 
-    public Economy getEconomy() {
-        return this.economy;
-    }
 }

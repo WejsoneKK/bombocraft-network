@@ -1,28 +1,18 @@
 package eu.wejsonekk.bombocraft.feature.npc;
 
+import eu.wejsonekk.bombocraft.hook.Hook;
+import org.bukkit.Bukkit;
+
 public class CitizensNPCHook implements Hook {
-    @Override
-    public void Hook() {
 
+    @Override
+    public void initialize() {
+
+        Bukkit.getLogger().info("This feature available made in future");
     }
 
     @Override
-    public void UnHook() {
-
-    }
-
-    @Override
-    public boolean isHooked() {
-        return false;
-    }
-
-    @Override
-    public String hookName() {
+    public String pluginName() {
         return "Citizens";
-    }
-
-    @Override
-    public String versionHook() {
-        return "2.0.32 b(3180)";
     }
 }
