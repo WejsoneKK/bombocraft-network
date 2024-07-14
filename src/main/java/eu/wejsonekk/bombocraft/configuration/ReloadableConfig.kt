@@ -1,10 +1,8 @@
-package eu.wejsonekk.bombocraft.configuration;
+package eu.wejsonekk.bombocraft.configuration
 
-import net.dzikoysk.cdn.source.Resource;
+import net.dzikoysk.cdn.source.Resource
+import java.io.File
 
-import java.io.File;
-
-public interface ReloadableConfig {
-    Resource resource(File folder);
-
+interface ReloadableConfig {
+    fun resource(folder: File?): Resource?
 }

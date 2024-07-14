@@ -1,38 +1,32 @@
-package eu.wejsonekk.bombocraft.commands.handler;
+package eu.wejsonekk.bombocraft.commands.handler
 
-import dev.rollczi.litecommands.handler.result.ResultHandlerChain;
-import dev.rollczi.litecommands.invocation.Invocation;
-import dev.rollczi.litecommands.permission.MissingPermissions;
-import dev.rollczi.litecommands.permission.MissingPermissionsHandler;
-import eu.wejsonekk.bombocraft.configuration.implementation.MessageConfiguration;
-import eu.wejsonekk.bombocraft.notification.NotificationAnnouncer;
-import org.bukkit.command.CommandSender;
-import panda.utilities.text.Formatter;
+import dev.rollczi.litecommands.handler.result.ResultHandlerChain
+import dev.rollczi.litecommands.invocation.Invocation
+import dev.rollczi.litecommands.permission.MissingPermissions
+import dev.rollczi.litecommands.permission.MissingPermissionsHandler
+import eu.wejsonekk.bombocraft.configuration.implementation.MessageConfiguration
+import eu.wejsonekk.bombocraft.notification.NotificationAnnouncer
+import org.bukkit.command.CommandSender
+import panda.utilities.text.Formatter
 
-public class MissingPermissionMessage implements MissingPermissionsHandler<CommandSender> {
+class MissingPermissionMessage(
+    private val messageConfiguration: MessageConfiguration,
+    private val messageAnnouncer: NotificationAnnouncer
+) : MissingPermissionsHandler<CommandSender?> {
+    override fun handle(
+        invocation: Invocation<CommandSender?>,
+        missingPermissions: MissingPermissions,
+        resultHandlerChain: ResultHandlerChain<CommandSender?>
+    ) {
+        val permissions = missingPermissions.asJoinedText()
+        val sender = invocation.sender()
 
-    private final MessageConfiguration messageConfiguration;
-    private final NotificationAnnouncer messageAnnouncer;
+        val formatter = Formatter()
+            .register("{permissions}", permissions)
+            .register("{PERMISSIONS}", permissions)
+            .register("{PERMISSION}", permissions)
+            .register("{permission}", permissions)
 
-    public MissingPermissionMessage(MessageConfiguration messageConfiguration, NotificationAnnouncer messageAnnouncer) {
-        this.messageConfiguration = messageConfiguration;
-        this.messageAnnouncer = messageAnnouncer;
-    }
-
-
-    @Override
-    public void handle(Invocation<CommandSender> invocation, MissingPermissions missingPermissions, ResultHandlerChain<CommandSender> resultHandlerChain) {
-
-        String permissions = missingPermissions.asJoinedText();
-        CommandSender sender = invocation.sender();
-
-        Formatter formatter = new Formatter()
-                .register("{permissions}", missingPermissions.getPermissions().get(0))
-                .register("{PERMISSIONS}", missingPermissions.getPermissions().get(0))
-                .register("{PERMISSION}", missingPermissions.getPermissions().get(0))
-                .register("{permission}", missingPermissions.getPermissions().get(0));
-
-        this.messageAnnouncer.sendMessage(sender, formatter.format(this.messageConfiguration.wrongUsage.noPermission));
-
+        messageAnnouncer.sendMessage(sender, formatter.format(messageConfiguration.noPermission))
     }
 }

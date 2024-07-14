@@ -1,35 +1,25 @@
-package eu.wejsonekk.bombocraft.hook.implementation;
+package eu.wejsonekk.bombocraft.hook.implementation
 
-import eu.wejsonekk.bombocraft.hook.Hook;
-import lombok.Getter;
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Server;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import eu.wejsonekk.bombocraft.hook.Hook
+import lombok.Getter
+import net.milkbowl.vault.economy.Economy
+import org.bukkit.Server
 
-public class VaultHook implements Hook {
-
-    private final Server server;
+class VaultHook(private val server: Server) : Hook {
     @Getter
-    private Economy economy;
+    private var economy: Economy? = null
 
-    public VaultHook(Server server) {
-        this.server = server;
+    override fun initialize() {
+        val economyProvider = server.servicesManager.getRegistration(
+            Economy::class.java
+        )
+
+        checkNotNull(economyProvider) { "Vault founded, but you don't have a plugin that supports economy" }
+
+        this.economy = economyProvider.provider
     }
 
-    @Override
-    public void initialize() {
-        RegisteredServiceProvider<Economy> economyProvider = this.server.getServicesManager().getRegistration(Economy.class);
-
-        if (economyProvider == null) {
-            throw new IllegalStateException("Vault founded, but you don't have a plugin that supports economy");
-        }
-
-        this.economy = economyProvider.getProvider();
+    override fun pluginName(): String {
+        return "Vault"
     }
-
-    @Override
-    public String pluginName() {
-        return "Vault";
-    }
-
 }

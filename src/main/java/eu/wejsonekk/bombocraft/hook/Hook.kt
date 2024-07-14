@@ -1,9 +1,7 @@
-package eu.wejsonekk.bombocraft.hook;
+package eu.wejsonekk.bombocraft.hook
 
-public interface Hook {
+interface Hook {
+    fun initialize()
 
-    void initialize();
-
-    String pluginName();
-
+    fun pluginName(): String?
 }

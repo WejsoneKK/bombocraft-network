@@ -1,14 +1,12 @@
-package eu.wejsonekk.bombocraft.feature.shop.category;
+package eu.wejsonekk.bombocraft.feature.shop.category
 
-import eu.wejsonekk.bombocraft.configuration.ReloadableConfig;
-import net.dzikoysk.cdn.source.Resource;
-import net.dzikoysk.cdn.source.Source;
+import eu.wejsonekk.bombocraft.configuration.ReloadableConfig
+import net.dzikoysk.cdn.source.Resource
+import net.dzikoysk.cdn.source.Source
+import java.io.File
 
-import java.io.File;
-
-public class ShopArmorCategoryConfiguration implements ReloadableConfig {
-    @Override
-    public Resource resource(File folder) {
-        return Source.of(folder, "shops/armor-category.yml");
+class ShopArmorCategoryConfiguration : ReloadableConfig {
+    override fun resource(folder: File?): Resource? {
+        return folder?.let { Source.of(it, "shops/armor-category.yml") }!!
     }
 }

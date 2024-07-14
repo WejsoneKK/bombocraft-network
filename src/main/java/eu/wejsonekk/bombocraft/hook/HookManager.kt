@@ -1,28 +1,16 @@
-package eu.wejsonekk.bombocraft.hook;
+package eu.wejsonekk.bombocraft.hook
 
-import org.bukkit.Server;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.Server
+import java.util.logging.Logger
 
-import java.util.logging.Logger;
+class HookManager(private val server: Server, private val logger: Logger) {
+    fun initialize(hook: Hook) {
+        val pluginManager = server.pluginManager
 
-public class HookManager {
+        if (pluginManager.isPluginEnabled(hook.pluginName()!!)) {
+            hook.initialize()
 
-    private final Server server;
-    private final Logger logger;
-
-    public HookManager(Server server, Logger logger) {
-        this.server = server;
-        this.logger = logger;
-    }
-
-    public void initialize(Hook hook) {
-        PluginManager pluginManager = this.server.getPluginManager();
-
-        if (pluginManager.isPluginEnabled(hook.pluginName())) {
-            hook.initialize();
-
-            this.logger.info("Hooked into " + hook.pluginName());
+            logger.info("Hooked into " + hook.pluginName())
         }
     }
-
 }

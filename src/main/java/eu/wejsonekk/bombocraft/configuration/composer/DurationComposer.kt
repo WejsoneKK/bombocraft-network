@@ -1,21 +1,17 @@
-package eu.wejsonekk.bombocraft.configuration.composer;
+package eu.wejsonekk.bombocraft.configuration.composer
 
-import panda.std.Result;
+import panda.std.Result
+import java.time.Duration
+import java.time.format.DateTimeParseException
 
-import java.time.Duration;
-import java.time.format.DateTimeParseException;
-import java.util.Locale;
+class DurationComposer : SimpleComposer<Duration?> {
 
-public class DurationComposer implements SimpleComposer<Duration> {
-
-    @Override
-    public Result<Duration, Exception> deserialize(String source) {
-        return Result.supplyThrowing(DateTimeParseException.class, () -> Duration.parse("PT" + source.toUpperCase(Locale.ROOT)));
+    override fun serialize(entity: Duration?): Result<String, java.lang.Exception> {
+        return Result.ok(entity.toString().substring(2).lowercase())
     }
 
-    @Override
-    public Result<String, Exception> serialize(Duration entity) {
-        return Result.ok(entity.toString().substring(2).toLowerCase(Locale.ROOT));
+    override fun deserialize(source: String): Result<Duration?, Exception>? {
+        return Result.supplyThrowing(DateTimeParseException::class.java) { Duration.parse("PT" + source.uppercase()) }
     }
 
 }

@@ -1,19 +1,22 @@
 package eu.wejsonekk.bombocraft;
 
-import com.github.benmanes.caffeine.cache.Scheduler;
 import com.google.common.base.Stopwatch;
 import dev.rollczi.litecommands.LiteCommands;
-import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
+import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import eu.wejsonekk.bombocraft.commands.handler.InvalidUsageMessage;
 import eu.wejsonekk.bombocraft.commands.handler.MissingPermissionMessage;
 import eu.wejsonekk.bombocraft.commands.implementation.*;
 import eu.wejsonekk.bombocraft.configuration.ConfigManager;
 import eu.wejsonekk.bombocraft.configuration.implementation.MessageConfiguration;
 import eu.wejsonekk.bombocraft.configuration.implementation.PluginConfiguration;
-import eu.wejsonekk.bombocraft.feature.shop.BomboStoreGui;
+import eu.wejsonekk.bombocraft.feature.shop.BomboStoreConfiguration;
+import eu.wejsonekk.bombocraft.feature.shop.BomboStoreMenu;
+import eu.wejsonekk.bombocraft.feature.shop.category.*;
+import eu.wejsonekk.bombocraft.menu.ranks.RanksMenu;
+import eu.wejsonekk.bombocraft.menu.survival.SurvivalMainMenuGui;
+import eu.wejsonekk.bombocraft.menu.survival.SurvivalMenuCommand;
 import eu.wejsonekk.bombocraft.notification.NotificationAnnouncer;
 import eu.wejsonekk.bombocraft.util.LegacyColorProcessor;
-import lombok.SneakyThrows;
 import net.kyori.adventure.platform.AudienceProvider;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -22,15 +25,27 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class BomboCraftPlugin extends JavaPlugin {
-    private Scheduler scheduler;
 
+
+
+    private ConfigManager configurationManager;
     private PluginConfiguration pluginConfiguration;
     private MessageConfiguration messageConfiguration;
-    private BomboStoreGui bomboStoreGui;
+    private BomboStoreMenu bomboStoreGui;
+    private BomboStoreConfiguration bomboStoreConfiguration;
+    private ShopBlocksCategoryConfiguration shopBlocksCategory;
+    private ShopBlocksDecorationCategoryConfiguration blockDecorationCategory;
+    private ShopArmorCategoryConfiguration shopArmorCategory;
+    private ShopMineralsCategoryConfiguration shopMineralsCategory;
+    private ShopToolsCategoryConfiguration shopToolsCategory;
 
+    private RanksMenu rankMenuGui;
+
+    private SurvivalMainMenuGui survivalMainMenu;
 
     private AudienceProvider audienceProvider;
     private MiniMessage miniMessage;
@@ -39,83 +54,67 @@ public class BomboCraftPlugin extends JavaPlugin {
     private LiteCommands<CommandSender> liteCommands;
 
     @Override
-    public void onDisable() {
-        if (this.audienceProvider != null) {
-            this.audienceProvider.close();
+    public void onDisable(){
+        if(this.audienceProvider!=null){
+
+            audienceProvider.close();
         }
 
         if (this.liteCommands != null) {
             this.liteCommands.getCommandManager().unregisterAll();
         }
     }
-    private void registerListener(Server server){
 
-//        Stream.of(
-//                new NeverNoHungerListener(this.miniMessage, this.notificationAnnouncer),
-//                new UserController(this.userService)
-//        ).forEach(listener -> server.getPluginManager().registerEvents(listener, this));
-    }
-    @SneakyThrows
+
+
+
     @Override
-    public void onEnable() {
+    public void onEnable(){
         Stopwatch started = Stopwatch.createStarted();
         Server server = this.getServer();
-        Logger logger = this.getLogger();
+        Logger logger;
         File dataFolder = this.getDataFolder();
 
 
-
-        ConfigManager configurationManager = new ConfigManager(this.getDataFolder());
+        this.configurationManager = new ConfigManager(dataFolder);
         this.pluginConfiguration = configurationManager.load(new PluginConfiguration());
         this.messageConfiguration = configurationManager.load(new MessageConfiguration());
+        this.shopBlocksCategory = configurationManager.load(new ShopBlocksCategoryConfiguration());
+        this.bomboStoreConfiguration = configurationManager.load(new BomboStoreConfiguration());
+        this.shopArmorCategory = configurationManager.load(new ShopArmorCategoryConfiguration());
+        this.shopMineralsCategory = configurationManager.load(new ShopMineralsCategoryConfiguration());
+        this.shopToolsCategory = configurationManager.load(new ShopToolsCategoryConfiguration());
 
         this.audienceProvider = BukkitAudiences.create(this);
         this.miniMessage = MiniMessage.builder()
                 .postProcessor(new LegacyColorProcessor())
                 .build();
 
-//        try {
-//            DatabaseManager.createTables();
-//
-//            ConnectionSource connectionSource = DatabaseManager.getConnectionSource();
-//            UserRepository userRepository = new UserRepository(connectionSource);
-//            UserService userService = new UserService(userRepository);
-//
-//            User user = new User("WejsoneKK", UUID.randomUUID());
-//            userService.addUser(user);
-//
-//            User retrievedUser = userService.getUserById(user.getId());
-//            System.out.println("Retrieved User: " + retrievedUser.getName());
-//
-//            connectionSource.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            throw new SQLException(e);
-//        }
-
-
         this.notificationAnnouncer = new NotificationAnnouncer(this.audienceProvider, this.miniMessage);
-        this.bomboStoreGui = new BomboStoreGui(this.miniMessage, this.messageConfiguration);
+        this.bomboStoreGui = new BomboStoreMenu(miniMessage);
+        this.survivalMainMenu = new SurvivalMainMenuGui();
+        this.rankMenuGui = new RanksMenu(this.miniMessage);
 
-        registerListener(this.getServer());
-        this.liteCommands = LiteCommandsBukkit.builder("bombocraft-network")
-                .settings(liteBukkitSettings -> {
-                    return liteBukkitSettings.nativePermissions(true);
+//        registerListener(server)
+        this.liteCommands = LiteBukkitFactory.builder("bombocraft")
+                .settings(settings -> {
+                    return settings.nativePermissions(true)
+                            .fallbackPrefix("bombocraft");
                 })
-                .commands(
-                        new BomboStoreCommand(this.bomboStoreGui),
-                        new YoutubeCommand(this.messageConfiguration, this.notificationAnnouncer),
-                        new DiscordCommand(this.notificationAnnouncer, this.messageConfiguration),
-                        new BugReportCommand(this.pluginConfiguration, this.notificationAnnouncer),
-                        new BugReportCommand(this.pluginConfiguration, this.notificationAnnouncer),
-                        new WebSiteCommand(this.notificationAnnouncer, this.messageConfiguration),
-                        new StoreCommand(this.notificationAnnouncer, this.messageConfiguration)
-                ).invalidUsage(new InvalidUsageMessage(this.notificationAnnouncer, this.messageConfiguration))
+            .commands(
+                new BomboStoreCommand(this.bomboStoreGui),
+                new YoutubeCommand(this.messageConfiguration, this.notificationAnnouncer),
+                new DiscordCommand(this.notificationAnnouncer, this.messageConfiguration),
+                new BugReportCommand(this.pluginConfiguration, this.notificationAnnouncer, this.messageConfiguration),
+                new WebSiteCommand(this.notificationAnnouncer, this.messageConfiguration),
+                new StoreCommand(this.notificationAnnouncer, this.messageConfiguration),
+                new RanksCommand(this.rankMenuGui),
+                new SurvivalMenuCommand(this.survivalMainMenu)
+        ).invalidUsage(new InvalidUsageMessage(this.notificationAnnouncer, this.messageConfiguration))
                 .missingPermission(new MissingPermissionMessage(this.messageConfiguration, this.notificationAnnouncer))
                 .build();
 
-        long elapsed = started.elapsed().toMillis();
-        this.getLogger().info("Successfully loaded bombocraft-network in " + elapsed + "ms");
+        long elapsed = started.elapsed(TimeUnit.MILLISECONDS);
+
     }
 }
