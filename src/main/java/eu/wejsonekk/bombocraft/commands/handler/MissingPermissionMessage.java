@@ -27,11 +27,8 @@ public class MissingPermissionMessage implements MissingPermissionsHandler<Comma
         CommandSender sender = invocation.sender();
 
         Formatter formatter = new Formatter()
-                .register("{permissions}", missingPermissions.getPermissions().get(0))
-                .register("{PERMISSIONS}", missingPermissions.getPermissions().get(0))
                 .register("{PERMISSION}", missingPermissions.getPermissions().get(0))
                 .register("{permission}", missingPermissions.getPermissions().get(0));
-
         this.messageAnnouncer.sendMessage(sender, formatter.format(this.messageConfiguration.wrongUsage.noPermission));
 
     }
