@@ -12,7 +12,7 @@ version = "1.0-SNAPSHOT"
 bukkit {
     main = "eu.wejsonekk.bombocraft.BomboCraftPlugin"
     name = "bombocraft-network"
-    apiVersion = "1.13"
+    apiVersion = "1.20"
     version = "1.0"
     description = "BomboCraft Network Suite"
     website = "https://bombocraft.com"
@@ -47,11 +47,6 @@ dependencies {
     // panda-utilities
     implementation("org.panda-lang:panda-utilities:0.5.2-alpha")
 
-    // Ormlite jdbc
-    implementation("com.j256.ormlite:ormlite-core:6.1")
-
-    compileOnly("com.j256.ormlite:ormlite-jdbc:6.1")
-
     // Hikari
     compileOnly("com.zaxxer:HikariCP:5.0.1")
 
@@ -83,18 +78,10 @@ dependencies {
 }
 
 
-tasks {
-    runServer {
-        // Configure the Minecraft version for our task.
-        // This is the only required configuration besides applying the plugin.
-        // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion("1.20.6")
-    }
-}
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
-
+    options.release.set(17)
 }
 tasks.withType<ShadowJar> {
     archiveFileName.set("${project.name}-(v${project.version}-(1.20.6).jar")
@@ -130,7 +117,6 @@ tasks.withType<ShadowJar> {
 }
 
 java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
