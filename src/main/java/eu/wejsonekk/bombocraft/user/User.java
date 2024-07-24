@@ -1,52 +1,30 @@
 package eu.wejsonekk.bombocraft.user;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import lombok.*;
 
 import java.util.UUID;
 
+@Setter
+@Getter
 @DatabaseTable(tableName = "users")
-
+@Data
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
-    @DatabaseField(generatedId = true)
-    private int Id;
-
-    @DatabaseField(canBeNull = false)
-    private String name;
-
-    @DatabaseField(canBeNull = true, unique = true)
+    @DatabaseField(columnName = "player_uniqueId", canBeNull = true, unique = true, id = true)
     public UUID uniqueId;
 
-    public User() {
-    }
+    @DatabaseField(columnDefinition = "player_nickname", canBeNull = false)
+    private String nickname;
 
-    public User(String name, UUID uniqueId) {
-        this.name = name;
-        this.uniqueId = uniqueId;
-    }
+    @DatabaseField(columnName = "first_login", canBeNull = false, dataType = DataType.DATE_TIME)
+    public Long firstLogin;
+    @DatabaseField(columnName = "last_login", canBeNull = false, dataType = DataType.DATE_TIME)
+    public long lastLogin;
 
-    public void setId(int id) {
-        Id = id;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setUniqueId(UUID uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-    public UUID getUniqueId() {
-        return uniqueId;
-    }
-
-    public int getId() {
-        return Id;
-    }
 }
