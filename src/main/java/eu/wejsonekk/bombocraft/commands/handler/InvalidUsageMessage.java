@@ -25,17 +25,26 @@ public class InvalidUsageMessage implements InvalidUsageHandler<CommandSender> {
         CommandSender sender = invocation.sender();
         Schematic schematic = result.getSchematic();
 
+        /* One Command Argument */
+
         if (schematic.isOnlyFirst()) {
             Formatter formatter = new Formatter()
                     .register("{COMMAND}", schematic.first());
             this.notificationAnnouncer.sendMessage(sender, formatter.format(this.messageConfiguration.wrongUsage.invalidUsage));
             return;
         }
+
+
+
+        /* Multiple subcommands arguments */
+        /* Header */
         this.notificationAnnouncer.sendMessage(sender, this.messageConfiguration.wrongUsage.invalidUsageHeader);
         for(String scheme : schematic.all()){
+
+
+            /* Subcommands Arguments line */
             Formatter formatter = new Formatter()
                     .register("{COMMAND}", scheme);
-
 
             this.notificationAnnouncer.sendMessage(sender, formatter.format(this.messageConfiguration.wrongUsage.invalidUsageEntry));
         }
