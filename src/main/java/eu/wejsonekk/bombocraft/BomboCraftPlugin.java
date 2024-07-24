@@ -7,13 +7,11 @@ import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteCommandsBukkit;
 import eu.wejsonekk.bombocraft.commands.handler.InvalidUsageMessage;
 import eu.wejsonekk.bombocraft.commands.handler.MissingPermissionMessage;
-import eu.wejsonekk.bombocraft.commands.implementation.BomboStoreCommand;
 import eu.wejsonekk.bombocraft.commands.implementation.DiscordCommand;
 import eu.wejsonekk.bombocraft.configuration.ConfigManager;
 import eu.wejsonekk.bombocraft.configuration.implementation.MessageConfiguration;
 import eu.wejsonekk.bombocraft.configuration.implementation.PluginConfiguration;
 import eu.wejsonekk.bombocraft.database.DatabaseManager;
-import eu.wejsonekk.bombocraft.feature.shop.BomboStoreGui;
 import eu.wejsonekk.bombocraft.notification.NotificationAnnouncer;
 import eu.wejsonekk.bombocraft.user.User;
 import eu.wejsonekk.bombocraft.user.UserRepository;
@@ -37,8 +35,6 @@ public class BomboCraftPlugin extends JavaPlugin {
 
     private PluginConfiguration pluginConfiguration;
     private MessageConfiguration messageConfiguration;
-    private BomboStoreGui bomboStoreGui;
-
 
     private AudienceProvider audienceProvider;
     private MiniMessage miniMessage;
@@ -56,13 +52,15 @@ public class BomboCraftPlugin extends JavaPlugin {
             this.liteCommands.getCommandManager().unregisterAll();
         }
     }
-    private void registerListener(Server server){
+
+    private void registerListener(Server server) {
 
 //        Stream.of(
 //                new NeverNoHungerListener(this.miniMessage, this.notificationAnnouncer),
 //                new UserController(this.userService)
 //        ).forEach(listener -> server.getPluginManager().registerEvents(listener, this));
     }
+
     @SneakyThrows
     @Override
     public void onEnable() {
@@ -70,7 +68,6 @@ public class BomboCraftPlugin extends JavaPlugin {
         Server server = this.getServer();
         Logger logger = this.getLogger();
         File dataFolder = this.getDataFolder();
-
 
 
         ConfigManager configurationManager = new ConfigManager(this.getDataFolder());
@@ -104,7 +101,7 @@ public class BomboCraftPlugin extends JavaPlugin {
 
 
         this.notificationAnnouncer = new NotificationAnnouncer(this.audienceProvider, this.miniMessage);
-        this.bomboStoreGui = new BomboStoreGui(this.miniMessage, this.messageConfiguration);
+//        this.bomboStoreGui = new BomboStoreGui(this.miniMessage, this.messageConfiguration);
 
         registerListener(this.getServer());
         this.liteCommands = LiteCommandsBukkit.builder("bombocraft-network")
@@ -112,13 +109,12 @@ public class BomboCraftPlugin extends JavaPlugin {
                     return liteBukkitSettings.nativePermissions(true);
                 })
                 .commands(
-                        new BomboStoreCommand(this.bomboStoreGui),
                         new DiscordCommand(this.notificationAnnouncer, this.messageConfiguration)
                 ).invalidUsage(new InvalidUsageMessage(this.notificationAnnouncer, this.messageConfiguration))
                 .missingPermission(new MissingPermissionMessage(this.messageConfiguration, this.notificationAnnouncer))
                 .build();
 
         long elapsed = started.elapsed().toMillis();
-        this.getLogger().info("Successfully loaded starblock-oneblock-core in " + elapsed + "ms");
+        this.getLogger().info("Successfully loaded bombocraft-core in " + elapsed + "ms");
     }
 }
