@@ -7,32 +7,18 @@ import org.bukkit.Bukkit;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-public class UserRepository {
-    private Dao<User, Integer> userDao;
+public interface UserRepository {
+    CompletableFuture<Void> update(User user);
 
-    public UserRepository(ConnectionSource connectionSource) throws SQLException {
-        userDao = DaoManager.createDao(connectionSource, User.class);
-    }
+    CompletableFuture<User> findUser(UUID uniqueId);
 
-    public void addUser(User user) throws SQLException {
-        Bukkit.getLogger().log(Level.INFO, "Creating new User " + user.getName());
-        userDao.create(user);
-    }
+    CompletableFuture<Set<User>> getAllUsers();
 
-    public User getUserById(int id) throws SQLException {
-        Bukkit.getLogger().log(Level.INFO, "Get User By ID (" + id + ")");
-        return userDao.queryForId(id);
-    }
+    CompletableFuture<User> deleteUser(UUID uniqueId);
 
-    public List<User> getAllUsers() throws SQLException {
-        Bukkit.getLogger().log(Level.INFO, "Geting all Users in Cache");
-        return userDao.queryForAll();
-    }
-
-    public void deleteUser(User user) throws SQLException {
-        Bukkit.getLogger().log(Level.INFO, "Delete User from Cache" + user.getName().toString());
-        userDao.delete(user);
-    }
 }
