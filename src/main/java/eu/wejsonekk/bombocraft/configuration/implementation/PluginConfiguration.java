@@ -1,6 +1,7 @@
 package eu.wejsonekk.bombocraft.configuration.implementation;
 
 import eu.wejsonekk.bombocraft.configuration.ReloadableConfig;
+import eu.wejsonekk.bombocraft.database.DatabaseType;
 import net.dzikoysk.cdn.entity.Contextual;
 import net.dzikoysk.cdn.entity.Description;
 import net.dzikoysk.cdn.source.Resource;
@@ -18,12 +19,13 @@ public class PluginConfiguration implements ReloadableConfig {
 //    public RedisMessagingChannelsSection RedisMessagingChannels = new RedisMessagingChannelsSection();
     @Contextual
     public static class DatabaseConfigSection {
+
         public String hostname = "127.0.0.1";
         public String database = "database";
         public String username = "user";
         public int port = 4406;
         public String password = "password";
-        public String type = "mysql";
+        public DatabaseType type = DatabaseType.SQLITE;
         public boolean useSSL = false;
 
     }
