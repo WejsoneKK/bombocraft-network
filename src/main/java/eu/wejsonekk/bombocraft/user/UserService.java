@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class UserService {
-    private UserRepository userRepository;
-    private Cache<Integer, User> userCache;
+    private final UserRepository userRepository;
+    private final Cache<Integer, User> userCache;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -19,8 +19,8 @@ public class UserService {
     }
 
     public void addUser(User user) throws SQLException {
-        userRepository.addUser(user);
-        userCache.put(user.getId(), user);
+        userRepository.findUser(user.getUniqueId());
+        userCache.put(user.uniqueId, user);
     }
 
     public User getUserById(int id) throws SQLException {
