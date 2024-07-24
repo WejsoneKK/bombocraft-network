@@ -4,6 +4,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.papermc.paperweight.userdev") version "1.7.1" apply false
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
+    id("xyz.jpenilla.run-paper") version "2.3.0"
 
 }
 group = "eu.wejsonekk.bombocraft"
@@ -30,7 +31,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly ("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly ("org.spigotmc:spigot-api:1.20.6-R0.1-SNAPSHOT")
     implementation("net.kyori:adventure-platform-bukkit:4.2.0")
     implementation("net.kyori:adventure-text-minimessage:4.12.0")
     // LiteCommands
@@ -80,13 +81,23 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:$lombok")
     testAnnotationProcessor("org.projectlombok:lombok:$lombok")
 }
+
+
+tasks {
+    runServer {
+        // Configure the Minecraft version for our task.
+        // This is the only required configuration besides applying the plugin.
+        // Your plugin's jar (or shadowJar if present) will be used automatically.
+        minecraftVersion("1.20.6")
+    }
+}
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
 
 }
 tasks.withType<ShadowJar> {
-    archiveFileName.set("${project.name}-(v${project.version}-(1.20.1).jar")
+    archiveFileName.set("${project.name}-(v${project.version}-(1.20.6).jar")
 
     exclude(
         "org/intellij/lang/annotations/**",
